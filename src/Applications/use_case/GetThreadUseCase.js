@@ -1,13 +1,23 @@
-const DetailThread = require('../../Domains/threads/entities/DetailThread');
+const ThreadDetail = require('../../Domains/threads/entities/ThreadDetail');
 
 class GetThreadUseCase {
-  constructor({ threadRepository }) {
+  constructor({ threadRepository, commentRepository }) {
     this._threadRepository = threadRepository;
+    this._commentRepository = commentRepository;
   }
 
   async execute(threadId) {
-    const threadData = await this._threadRepository.getThreadById(threadId);
-    return new DetailThread(threadData);
+    await this._threadRepository.verifyAvailableThread(threadId);
+    const thread = await this._threadRepository.getThreadById(threadId);
+    const comments = await this._commentRepository.getCommentsByThreadId(threadId);
+    return new ThreadDetail({
+      id: thread.id,
+      title: thread.title,
+      body: thread.body,
+      date: thread.date.toISOString(),
+      username: thread.username,
+      comments,
+    });
   }
 }
 

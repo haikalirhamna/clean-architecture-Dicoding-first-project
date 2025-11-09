@@ -5,8 +5,9 @@ class ThreadsHandler {
     this._container = container;
 
     this.postThreadHandler = this.postThreadHandler.bind(this);
-    // this.getThreadHandler = this.getThreadHandler.bind(this);
+    this.getThreadHandler = this.getThreadHandler.bind(this);
   }
+
   async postThreadHandler(request, h) {
     const { id: owner } = request.auth.credentials;
     const addThreadUseCase = this._container.getInstance(AddThreadUseCase.name);
@@ -18,6 +19,20 @@ class ThreadsHandler {
       },
     });
     response.code(201);
+    return response;
+  }
+
+  async getThreadHandler(request, h) {
+    const { threadId } = request.params;
+    const getThreadUseCase = this._container.getInstance('GetThreadUseCase');
+    const thread = await getThreadUseCase.execute(threadId);
+    const response = h.response({
+      status: 'success',
+      data: { 
+        thread 
+      },
+    });
+    response.code(200);
     return response;
   }
 }
