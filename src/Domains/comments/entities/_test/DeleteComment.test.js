@@ -10,7 +10,7 @@ describe('DeleteComment entity', () => {
     };
 
     // Action & Assert
-    expect(() => new DeleteComment(payload))
+    expect(() => new DeleteComment(payload.threadId, payload.commentId, payload.owner))
       .toThrowError('DELETE_COMMENT_USE_CASE.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
@@ -23,7 +23,7 @@ describe('DeleteComment entity', () => {
     };
 
     // Action & Assert
-    expect(() => new DeleteComment(payload))
+    expect(() => new DeleteComment(payload.threadId, payload.commentId, payload.owner))
       .toThrowError('DELETE_COMMENT_USE_CASE.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 
@@ -36,7 +36,7 @@ describe('DeleteComment entity', () => {
     };
 
     // Action
-    const deleteComment = new DeleteComment(payload);
+    const deleteComment = new DeleteComment(payload.threadId, payload.commentId, payload.owner);
 
     // Assert
     expect(deleteComment.threadId).toEqual(payload.threadId);
